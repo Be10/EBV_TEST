@@ -2,11 +2,14 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
   getAllPlaces,
+  getEventsByPlaceId,
+  type Event,
   type Place,
 } from "../../lib/queries";
 
 type Props = {
   place: Place;
+  events: Event[];
 };
 
 export function getStaticPaths() {
@@ -16,11 +19,14 @@ export function getStaticPaths() {
     .filter((place) => place.status !== "Borrador")
     .map((place) => ({
       params: { slug: place.slug },
-      props: { place },
+      props: {
+        place,
+        events: getEventsByPlaceId(place.id),
+      },
     }));
 }
 
-const { place } = Astro.props;
+const { place, events } = Astro.props;
 ---
 
 <BaseLayout
@@ -42,7 +48,29 @@ const { place } = Astro.props;
           {place.summary}
         </p>
       )}
+
+      {place.latitude && place.longitude && (
+        <div class="actions">
+          <a href={`/mapa/?lugar=${place.slug}`} class="button">
+            Ver en el mapa bíblico
+          </a>
+        </div>
+      )}
     </section>
+
+    {events.length > 0 && (
+      <section class="section">
+        <h2>Eventos relacionados</h2>
+
+        <ul class="pill-list">
+          {events.map((event) => (
+            <li>
+              <a href={`/eventos/${event.slug}/`}>{event.title}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     <section class="section">
       <h2>Importancia bíblica</h2>

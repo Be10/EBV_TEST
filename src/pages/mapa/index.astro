@@ -1,9 +1,15 @@
 ---
 import "leaflet/dist/leaflet.css";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getMapPlaces } from "../../lib/queries";
+import { getEventsByPlaceId, getMapPlaces } from "../../lib/queries";
 
-const places = getMapPlaces();
+const places = getMapPlaces().map((place) => ({
+  ...place,
+  events: getEventsByPlaceId(place.id).map((event) => ({
+    title: event.title,
+    slug: event.slug,
+  })),
+}));
 ---
 
 <BaseLayout
@@ -53,6 +59,10 @@ const places = getMapPlaces();
     longitude: number;
     map_zoom: number | null;
     geographical_certainty: string | null;
+    events: {
+      title: string;
+      slug: string;
+    }[];
   };
 
   const placesElement = document.getElementById("map-places");
@@ -73,16 +83,36 @@ const places = getMapPlaces();
 
   const bounds = L.latLngBounds([]);
 
+  const markersBySlug = new Map<string, L.Marker>();
+
   places.forEach((place) => {
     const latLng: [number, number] = [place.latitude, place.longitude];
 
     const marker = L.marker(latLng).addTo(map);
+
+    markersBySlug.set(place.slug, marker);
+
+    const eventsHtml =
+      place.events.length > 0
+        ? `
+          <p><strong>Eventos:</strong></p>
+          <ul>
+            ${place.events
+              .map(
+                (event) =>
+                  `<li><a href="/eventos/${event.slug}/">${event.title}</a></li>`
+              )
+              .join("")}
+          </ul>
+        `
+        : "";
 
     marker.bindPopup(`
       <div class="map-popup">
         <h3>${place.name}</h3>
         <p>${place.summary ?? ""}</p>
         <p><strong>Certeza:</strong> ${place.geographical_certainty ?? "Pendiente"}</p>
+        ${eventsHtml}
         <a href="/lugares/${place.slug}/">Ver lugar</a>
       </div>
     `);
@@ -91,9 +121,28 @@ const places = getMapPlaces();
   });
 
   if (places.length > 0) {
-    map.fitBounds(bounds, {
-      padding: [48, 48],
-      maxZoom: 8,
-    });
+  map.fitBounds(bounds, {
+    padding: [48, 48],
+    maxZoom: 8,
+  });
+  }
+
+  const selectedPlaceSlug = new URLSearchParams(window.location.search).get("lugar");
+
+  if (selectedPlaceSlug) {
+    const selectedMarker = markersBySlug.get(selectedPlaceSlug);
+
+    if (selectedMarker) {
+      const selectedPlace = places.find((place) => place.slug === selectedPlaceSlug);
+
+      if (selectedPlace) {
+        map.setView(
+          [selectedPlace.latitude, selectedPlace.longitude],
+          selectedPlace.map_zoom ?? 10
+        );
+      }
+
+      selectedMarker.openPopup();
+    }
   }
 </script>

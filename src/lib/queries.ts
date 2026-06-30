@@ -382,3 +382,17 @@ export function getMapPlaces(): MapPlace[] {
     )
     .all() as MapPlace[];
 }
+
+export function getEventsByPlaceId(placeId: string): Event[] {
+  return db
+    .prepare(
+      `
+      SELECT events.*
+      FROM event_places
+      JOIN events ON events.id = event_places.event_id
+      WHERE event_places.place_id = ?
+      ORDER BY events.chronological_order ASC, events.title ASC
+      `
+    )
+    .all(placeId) as Event[];
+}
