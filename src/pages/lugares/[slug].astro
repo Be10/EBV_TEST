@@ -52,6 +52,27 @@ const { place } = Astro.props;
       </div>
     </section>
 
+    <section class="grid">
+      <article class="card">
+        <h2>Tipo</h2>
+        <p>{place.place_type ?? "Lugar bíblico"}</p>
+      </article>
+
+      <article class="card">
+        <h2>Certeza geográfica</h2>
+        <p>{place.geographical_certainty ?? "Pendiente"}</p>
+      </article>
+
+      <article class="card">
+        <h2>Coordenadas</h2>
+        <p>
+          {place.latitude && place.longitude
+            ? `${place.latitude}, ${place.longitude}`
+            : "Pendiente"}
+        </p>
+      </article>
+    </section>
+
     <section class="section">
       <h2>Estado del contenido</h2>
 

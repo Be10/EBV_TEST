@@ -216,6 +216,10 @@ export type Place = {
   slug: string;
   place_type: string | null;
   summary: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  map_zoom: number | null;
+  geographical_certainty: string | null;
   status: string;
 };
 
@@ -340,4 +344,41 @@ export function getEventsByLessonId(lessonId: string): Event[] {
       `
     )
     .all(lessonId) as Event[];
+}
+
+export type MapPlace = {
+  id: string;
+  name: string;
+  slug: string;
+  place_type: string | null;
+  summary: string | null;
+  latitude: number;
+  longitude: number;
+  map_zoom: number | null;
+  geographical_certainty: string | null;
+};
+
+export function getMapPlaces(): MapPlace[] {
+  return db
+    .prepare(
+      `
+      SELECT
+        id,
+        name,
+        slug,
+        place_type,
+        summary,
+        latitude,
+        longitude,
+        map_zoom,
+        geographical_certainty
+      FROM places
+      WHERE
+        status != 'Borrador'
+        AND latitude IS NOT NULL
+        AND longitude IS NOT NULL
+      ORDER BY name ASC
+      `
+    )
+    .all() as MapPlace[];
 }

@@ -148,9 +148,34 @@ INSERT INTO people (id, name, slug, summary, status) VALUES
 ('per-profetas', 'Los profetas', 'profetas', 'Mensajeros de Dios que llamaron al arrepentimiento y anunciaron esperanza.', 'Publicado básico'),
 ('per-apostoles', 'Los apóstoles', 'apostoles', 'Testigos enviados para anunciar a Jesús y enseñar a la iglesia.', 'Publicado básico');
 
-INSERT INTO places (id, name, slug, place_type, summary, status) VALUES
-('lug-jerusalen', 'Jerusalén', 'jerusalen', 'Ciudad', 'Ciudad central en la historia bíblica, relacionada con el templo, Jesús y la iglesia primitiva.', 'Publicado básico'),
-('lug-camino-emaus', 'Camino a Emaús', 'camino-a-emaus', 'Ruta', 'Lugar asociado con la explicación de Jesús sobre las Escrituras después de su resurrección.', 'Publicado básico');
+INSERT INTO places (
+  id, name, slug, place_type, summary, latitude, longitude, map_zoom,
+  geographical_certainty, status
+) VALUES
+(
+  'lug-jerusalen',
+  'Jerusalén',
+  'jerusalen',
+  'Ciudad',
+  'Ciudad central en la historia bíblica, relacionada con el templo, Jesús y la iglesia primitiva.',
+  31.7780,
+  35.2354,
+  10,
+  'Alta',
+  'Publicado básico'
+),
+(
+  'lug-camino-emaus',
+  'Camino a Emaús',
+  'camino-a-emaus',
+  'Ruta',
+  'Lugar asociado con la explicación de Jesús sobre las Escrituras después de su resurrección. La ubicación exacta de Emaús es debatida.',
+  31.8340,
+  35.0300,
+  10,
+  'Debatida',
+  'Publicado básico'
+);
 
 INSERT INTO glossary_terms (id, term, slug, definition, status) VALUES
 ('glo-biblia', 'Biblia', 'biblia', 'Conjunto de escritos inspirados que revelan quién es Dios, su voluntad y su plan de redención.', 'Publicado básico'),

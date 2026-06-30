@@ -113,6 +113,10 @@ CREATE TABLE places (
   slug TEXT NOT NULL UNIQUE,
   place_type TEXT,
   summary TEXT,
+  latitude REAL,
+  longitude REAL,
+  map_zoom INTEGER,
+  geographical_certainty TEXT,
   status TEXT NOT NULL DEFAULT 'Borrador'
 );
 
