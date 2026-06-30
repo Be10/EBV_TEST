@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  getAllPeople,
+  type Person,
+} from "../../lib/queries";
+
+type Props = {
+  person: Person;
+};
+
+export function getStaticPaths() {
+  const people = getAllPeople();
+
+  return people
+    .filter((person) => person.status !== "Borrador")
+    .map((person) => ({
+      params: { slug: person.slug },
+      props: { person },
+    }));
+}
+
+const { person } = Astro.props;
+---
+
+<BaseLayout
+  title={person.name}
+  description={person.summary ?? "Personaje de la Enciclopedia Bíblica Visual."}
+>
+  <main class="page">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a> → Personajes → {person.name}
+    </div>
+
+    <section class="hero">
+      <p class="eyebrow">Personaje bíblico</p>
+
+      <h1>{person.name}</h1>
+
+      {person.summary && (
+        <p class="subtitle">
+          {person.summary}
+        </p>
+      )}
+    </section>
+
+    <section class="section">
+      <h2>Biografía breve</h2>
+
+      <div class="content">
+        <p>{person.summary ?? "Biografía pendiente."}</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Estado del contenido</h2>
+
+      <div class="content">
+        <p>{person.status}</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

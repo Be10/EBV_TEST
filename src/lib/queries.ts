@@ -193,3 +193,108 @@ export function getAllLessons(): Lesson[] {
     )
     .all() as Lesson[];
 }
+
+export type Topic = {
+  id: string;
+  title: string;
+  slug: string;
+  definition: string | null;
+  status: string;
+};
+
+export type Person = {
+  id: string;
+  name: string;
+  slug: string;
+  summary: string | null;
+  status: string;
+};
+
+export type Place = {
+  id: string;
+  name: string;
+  slug: string;
+  place_type: string | null;
+  summary: string | null;
+  status: string;
+};
+
+export type GlossaryTerm = {
+  id: string;
+  term: string;
+  slug: string;
+  definition: string | null;
+  status: string;
+};
+
+export function getAllTopics(): Topic[] {
+  return db
+    .prepare(
+      `
+      SELECT *
+      FROM topics
+      ORDER BY title ASC
+      `
+    )
+    .all() as Topic[];
+}
+
+export function getTopicBySlug(slug: string): Topic | undefined {
+  return db
+    .prepare("SELECT * FROM topics WHERE slug = ?")
+    .get(slug) as Topic | undefined;
+}
+
+export function getAllPeople(): Person[] {
+  return db
+    .prepare(
+      `
+      SELECT *
+      FROM people
+      ORDER BY name ASC
+      `
+    )
+    .all() as Person[];
+}
+
+export function getPersonBySlug(slug: string): Person | undefined {
+  return db
+    .prepare("SELECT * FROM people WHERE slug = ?")
+    .get(slug) as Person | undefined;
+}
+
+export function getAllPlaces(): Place[] {
+  return db
+    .prepare(
+      `
+      SELECT *
+      FROM places
+      ORDER BY name ASC
+      `
+    )
+    .all() as Place[];
+}
+
+export function getPlaceBySlug(slug: string): Place | undefined {
+  return db
+    .prepare("SELECT * FROM places WHERE slug = ?")
+    .get(slug) as Place | undefined;
+}
+
+export function getAllGlossaryTerms(): GlossaryTerm[] {
+  return db
+    .prepare(
+      `
+      SELECT *
+      FROM glossary_terms
+      ORDER BY term ASC
+      `
+    )
+    .all() as GlossaryTerm[];
+}
+
+export function getGlossaryTermBySlug(slug: string): GlossaryTerm | undefined {
+  return db
+    .prepare("SELECT * FROM glossary_terms WHERE slug = ?")
+    .get(slug) as GlossaryTerm | undefined;
+}

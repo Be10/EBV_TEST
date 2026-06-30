@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  getAllGlossaryTerms,
+  type GlossaryTerm,
+} from "../../lib/queries";
+
+type Props = {
+  term: GlossaryTerm;
+};
+
+export function getStaticPaths() {
+  const terms = getAllGlossaryTerms();
+
+  return terms
+    .filter((term) => term.status !== "Borrador")
+    .map((term) => ({
+      params: { slug: term.slug },
+      props: { term },
+    }));
+}
+
+const { term } = Astro.props;
+---
+
+<BaseLayout
+  title={term.term}
+  description={term.definition ?? "Término del Glosario Visual."}
+>
+  <main class="page">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a> → Glosario → {term.term}
+    </div>
+
+    <section class="hero">
+      <p class="eyebrow">Glosario visual</p>
+
+      <h1>{term.term}</h1>
+
+      {term.definition && (
+        <p class="subtitle">
+          {term.definition}
+        </p>
+      )}
+    </section>
+
+    <section class="section">
+      <h2>Definición simple</h2>
+
+      <div class="content">
+        <p>{term.definition ?? "Definición pendiente."}</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Estado del contenido</h2>
+
+      <div class="content">
+        <p>{term.status}</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

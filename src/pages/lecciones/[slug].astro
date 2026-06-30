@@ -148,7 +148,9 @@ const {
           <h2>Personajes</h2>
           <ul class="list">
             {people.map((person) => (
-              <li>{person.title}</li>
+                <li>
+                    <a href={`/personajes/${person.slug}/`}>{person.title}</a>
+                </li>
             ))}
           </ul>
         </article>
@@ -159,7 +161,9 @@ const {
           <h2>Temas</h2>
           <ul class="list">
             {topics.map((topic) => (
-              <li>{topic.title}</li>
+                <li>
+                    <a href={`/temas/${topic.slug}/`}>{topic.title}</a>
+                </li>
             ))}
           </ul>
         </article>
@@ -170,7 +174,9 @@ const {
           <h2>Glosario</h2>
           <ul class="list">
             {glossary.map((term) => (
-              <li>{term.title}</li>
+                <li>
+                    <a href={`/glosario/${term.slug}/`}>{term.title}</a>
+                </li>
             ))}
           </ul>
         </article>
@@ -182,11 +188,11 @@ const {
         <h2>Lugares relacionados</h2>
 
         <ul class="pill-list">
-          {places.map((place) => (
-            <li>
-              <span>{place.title}</span>
-            </li>
-          ))}
+            {places.map((place) => (
+                <li>
+                    <a href={`/lugares/${place.slug}/`}>{place.title}</a>
+                </li>
+            ))}
         </ul>
       </section>
     )}
