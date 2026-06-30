@@ -1,0 +1,248 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Enciclopedia Bíblica Visual con rutas guiadas, mapas, líneas de tiempo y recursos visuales.",
+} = Astro.props;
+
+const siteName = "Enciclopedia Bíblica Visual";
+const pageTitle = title === siteName ? title : `${title} | ${siteName}`;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <a href="/" class="logo">Enciclopedia Bíblica Visual</a>
+
+      <nav class="nav">
+        <a href="/rutas/panorama-visual-de-la-biblia/">Ruta principal</a>
+        <a href="/lecciones/la-biblia-como-una-sola-historia/">Lección 1</a>
+      </nav>
+    </header>
+
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+    background: #f8f5ee;
+    color: #2d2418;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .site-header {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .logo {
+    font-weight: 800;
+    text-decoration: none;
+    color: #5d3212;
+  }
+
+  .nav {
+    display: flex;
+    gap: 16px;
+    font-size: 0.95rem;
+  }
+
+  .nav a {
+    color: #6a5c4d;
+    text-decoration: none;
+  }
+
+  .nav a:hover {
+    color: #5d3212;
+    text-decoration: underline;
+  }
+
+  .page {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 72px;
+  }
+
+  .hero {
+    padding: 64px 32px;
+    border-radius: 28px;
+    background: #fffaf0;
+    border: 1px solid #eadcc4;
+    box-shadow: 0 20px 60px rgba(45, 36, 24, 0.08);
+  }
+
+  .eyebrow {
+    margin: 0 0 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a5a2b;
+  }
+
+  h1 {
+    max-width: 820px;
+    margin: 0;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+  }
+
+  .subtitle {
+    max-width: 760px;
+    margin: 24px 0 0;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: #5e5143;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: #5d3212;
+    color: #fffaf0;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .button.secondary {
+    background: transparent;
+    color: #5d3212;
+    border: 1px solid #c8a982;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .card {
+    padding: 24px;
+    border-radius: 22px;
+    background: white;
+    border: 1px solid #eadcc4;
+  }
+
+  .card h2,
+  .card h3 {
+    margin: 0 0 8px;
+  }
+
+  .card p {
+    margin: 0;
+    line-height: 1.6;
+    color: #6a5c4d;
+  }
+
+  .section {
+    margin-top: 32px;
+    padding: 32px;
+    border-radius: 24px;
+    background: white;
+    border: 1px solid #eadcc4;
+  }
+
+  .section h2 {
+    margin-top: 0;
+  }
+
+  .content {
+    max-width: 760px;
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+
+  .breadcrumb {
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    color: #7a6a58;
+  }
+
+  .list {
+    padding-left: 1.2rem;
+    line-height: 1.8;
+  }
+
+  .pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pill-list a,
+  .pill-list span {
+    display: inline-flex;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #fff7e8;
+    border: 1px solid #eadcc4;
+    color: #5d3212;
+    text-decoration: none;
+    font-weight: 650;
+  }
+
+  @media (max-width: 760px) {
+    .site-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .hero {
+      padding: 40px 22px;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .section {
+      padding: 24px;
+    }
+  }
+</style>
