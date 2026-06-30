@@ -3,12 +3,14 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
   getAllLessons,
   getBibleRefsByLessonId,
+  getEventsByLessonId,
   getGlossaryByLessonId,
   getPeopleByLessonId,
   getPlacesByLessonId,
   getPointsByLessonId,
   getQuestionsByLessonId,
   getTopicsByLessonId,
+  type Event,
   type Lesson,
   type LessonBibleRef,
   type LessonPoint,
@@ -25,6 +27,7 @@ type Props = {
   people: RelatedItem[];
   places: RelatedItem[];
   glossary: RelatedItem[];
+  events: Event[];
 };
 
 export function getStaticPaths() {
@@ -43,6 +46,7 @@ export function getStaticPaths() {
         people: getPeopleByLessonId(lesson.id),
         places: getPlacesByLessonId(lesson.id),
         glossary: getGlossaryByLessonId(lesson.id),
+        events: getEventsByLessonId(lesson.id),
       },
     }));
 }
@@ -56,6 +60,7 @@ const {
   people,
   places,
   glossary,
+  events,
 } = Astro.props;
 ---
 
@@ -130,6 +135,20 @@ const {
 
     <section class="section">
       <h2>La Biblia en una línea</h2>
+
+      {events.length > 0 && (
+        <section class="section">
+          <h2>Eventos relacionados</h2>
+
+          <ul class="pill-list">
+            {events.map((event) => (
+              <li>
+                <a href={`/eventos/${event.slug}/`}>{event.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <ul class="pill-list">
         <li><span>Creación</span></li>

@@ -75,6 +75,73 @@ INSERT INTO topics (id, title, slug, definition, status) VALUES
 ('tem-creacion', 'Creación', 'creacion', 'Dios hizo todas las cosas con propósito.', 'Publicado básico'),
 ('tem-nueva-creacion', 'Nueva creación', 'nueva-creacion', 'La restauración final de todas las cosas por Dios.', 'Publicado básico');
 
+INSERT INTO events (id, title, slug, event_type, summary, description, biblical_period,
+  approximate_date, chronological_order, temporal_certainty, geographical_certainty,
+  appears_on_timeline, appears_on_map, status) VALUES
+( 'eve-historia-biblica-general', 'Historia bíblica general', 'historia-biblica-general', 'Panorama', 'La gran historia de la Biblia desde la creación hasta la nueva creación.', 'Este evento panorámico resume el hilo principal de la Biblia: creación, caída, promesa, redención en Jesús, iglesia y nueva creación.', 'Panorama bíblico', 'Desde Génesis hasta Apocalipsis', 1, 'Conceptual', 'No aplica', 1, 0, 'Publicado básico'),
+( 'eve-creacion', 'Creación',
+  'creacion',
+  'Creación',
+  'Dios crea todas las cosas con propósito.',
+  'La Biblia presenta a Dios como Creador de los cielos, la tierra y todo lo que existe.',
+  'Orígenes',
+  'Inicio de la historia bíblica',
+  2,
+  'Conceptual',
+  'No aplica',
+  1,
+  0,
+  'Publicado básico'
+),
+(
+  'eve-caida',
+  'La caída',
+  'la-caida',
+  'Pecado / rebelión',
+  'El pecado entra en la historia humana y rompe la relación con Dios.',
+  'La caída muestra la desobediencia humana y sus consecuencias sobre la humanidad y la creación.',
+  'Orígenes',
+  'Después de la creación',
+  3,
+  'Conceptual',
+  'No aplica',
+  1,
+  0,
+  'Publicado básico'
+),
+(
+  'eve-promesa-redencion',
+  'Primera promesa de redención',
+  'primera-promesa-de-redencion',
+  'Promesa',
+  'Dios anuncia esperanza y victoria sobre el mal.',
+  'Desde el inicio, Dios muestra que el pecado no tendrá la última palabra y anuncia una promesa de victoria.',
+  'Orígenes',
+  'Después de la caída',
+  4,
+  'Conceptual',
+  'No aplica',
+  1,
+  0,
+  'Publicado básico'
+),
+(
+  'eve-venida-de-jesus',
+  'Venida de Jesús',
+  'venida-de-jesus',
+  'Cumplimiento mesiánico',
+  'Jesús viene como el Mesías prometido y centro de la historia bíblica.',
+  'El Nuevo Testamento presenta a Jesús como el cumplimiento de las promesas, figuras y esperanzas del Antiguo Testamento.',
+  'Nuevo Testamento',
+  'Siglo I d.C.',
+  19,
+  'Alta',
+  'Alta',
+  1,
+  1,
+  'Publicado básico'
+);
+
 INSERT INTO people (id, name, slug, summary, status) VALUES
 ('per-jesus', 'Jesús', 'jesus', 'El Hijo de Dios, Mesías prometido y centro de la historia bíblica.', 'Publicado básico'),
 ('per-moises', 'Moisés', 'moises', 'Siervo de Dios usado para liberar a Israel y entregar la Ley.', 'Publicado básico'),
@@ -101,15 +168,44 @@ INSERT INTO lesson_topics (lesson_id, topic_id) VALUES
 ('lec-biblia-una-sola-historia', 'tem-creacion'),
 ('lec-biblia-una-sola-historia', 'tem-nueva-creacion');
 
+INSERT INTO event_topics (event_id, topic_id) VALUES
+('eve-historia-biblica-general', 'tem-redencion'),
+('eve-historia-biblica-general', 'tem-mesias'),
+('eve-historia-biblica-general', 'tem-evangelio'),
+('eve-creacion', 'tem-creacion'),
+('eve-promesa-redencion', 'tem-redencion'),
+('eve-promesa-redencion', 'tem-mesias'),
+('eve-venida-de-jesus', 'tem-mesias'),
+('eve-venida-de-jesus', 'tem-evangelio'),
+('eve-venida-de-jesus', 'tem-redencion');
+
+INSERT INTO lesson_events (lesson_id, event_id) VALUES
+('lec-biblia-una-sola-historia', 'eve-historia-biblica-general'),
+('lec-biblia-una-sola-historia', 'eve-creacion'),
+('lec-biblia-una-sola-historia', 'eve-caida'),
+('lec-biblia-una-sola-historia', 'eve-promesa-redencion'),
+('lec-biblia-una-sola-historia', 'eve-venida-de-jesus');
+
 INSERT INTO lesson_people (lesson_id, person_id) VALUES
 ('lec-biblia-una-sola-historia', 'per-jesus'),
 ('lec-biblia-una-sola-historia', 'per-moises'),
 ('lec-biblia-una-sola-historia', 'per-profetas'),
 ('lec-biblia-una-sola-historia', 'per-apostoles');
 
+INSERT INTO event_people (event_id, person_id) VALUES
+('eve-historia-biblica-general', 'per-jesus'),
+('eve-historia-biblica-general', 'per-moises'),
+('eve-historia-biblica-general', 'per-profetas'),
+('eve-historia-biblica-general', 'per-apostoles'),
+('eve-venida-de-jesus', 'per-jesus');
+
 INSERT INTO lesson_places (lesson_id, place_id) VALUES
 ('lec-biblia-una-sola-historia', 'lug-jerusalen'),
 ('lec-biblia-una-sola-historia', 'lug-camino-emaus');
+
+INSERT INTO event_places (event_id, place_id) VALUES
+('eve-historia-biblica-general', 'lug-jerusalen'),
+('eve-venida-de-jesus', 'lug-jerusalen');
 
 INSERT INTO lesson_glossary (lesson_id, glossary_id) VALUES
 ('lec-biblia-una-sola-historia', 'glo-biblia'),

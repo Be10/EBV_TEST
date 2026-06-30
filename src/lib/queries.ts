@@ -298,3 +298,46 @@ export function getGlossaryTermBySlug(slug: string): GlossaryTerm | undefined {
     .prepare("SELECT * FROM glossary_terms WHERE slug = ?")
     .get(slug) as GlossaryTerm | undefined;
 }
+
+export type Event = {
+  id: string;
+  title: string;
+  slug: string;
+  event_type: string | null;
+  summary: string | null;
+  description: string | null;
+  biblical_period: string | null;
+  approximate_date: string | null;
+  chronological_order: number | null;
+  temporal_certainty: string | null;
+  geographical_certainty: string | null;
+  appears_on_timeline: number;
+  appears_on_map: number;
+  status: string;
+};
+
+export function getAllEvents(): Event[] {
+  return db
+    .prepare(
+      `
+      SELECT *
+      FROM events
+      ORDER BY chronological_order ASC, title ASC
+      `
+    )
+    .all() as Event[];
+}
+
+export function getEventsByLessonId(lessonId: string): Event[] {
+  return db
+    .prepare(
+      `
+      SELECT events.*
+      FROM lesson_events
+      JOIN events ON events.id = lesson_events.event_id
+      WHERE lesson_events.lesson_id = ?
+      ORDER BY events.chronological_order ASC, events.title ASC
+      `
+    )
+    .all(lessonId) as Event[];
+}

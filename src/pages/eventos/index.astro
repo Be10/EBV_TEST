@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllEvents } from "../../lib/queries";
+
+const events = getAllEvents().filter((event) => event.status !== "Borrador");
+---
+
+<BaseLayout
+  title="Eventos bíblicos"
+  description="Explora eventos bíblicos conectados con la línea de tiempo, el mapa, personajes, lugares y temas."
+>
+  <main class="page">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a> → Eventos
+    </div>
+
+    <section class="hero">
+      <p class="eyebrow">Línea de tiempo futura</p>
+
+      <h1>Eventos bíblicos</h1>
+
+      <p class="subtitle">
+        Eventos que conectan lecciones, personajes, lugares, temas, mapas y líneas de tiempo.
+      </p>
+    </section>
+
+    <section class="entity-list">
+      {events.map((event) => (
+        <a href={`/eventos/${event.slug}/`} class="entity-card">
+          <span class="meta">{event.biblical_period ?? "Evento bíblico"}</span>
+          <h2>{event.title}</h2>
+          <p>{event.summary ?? "Resumen pendiente."}</p>
+        </a>
+      ))}
+    </section>
+  </main>
+</BaseLayout>

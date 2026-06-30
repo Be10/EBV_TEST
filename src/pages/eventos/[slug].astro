@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  getAllEvents,
+  type Event,
+} from "../../lib/queries";
+
+type Props = {
+  event: Event;
+};
+
+export function getStaticPaths() {
+  const events = getAllEvents();
+
+  return events
+    .filter((event) => event.status !== "Borrador")
+    .map((event) => ({
+      params: { slug: event.slug },
+      props: { event },
+    }));
+}
+
+const { event } = Astro.props;
+---
+
+<BaseLayout
+  title={event.title}
+  description={event.summary ?? "Evento bíblico de la Enciclopedia Bíblica Visual."}
+>
+  <main class="page">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a> → Eventos → {event.title}
+    </div>
+
+    <section class="hero">
+      <p class="eyebrow">{event.event_type ?? "Evento bíblico"}</p>
+
+      <h1>{event.title}</h1>
+
+      {event.summary && (
+        <p class="subtitle">
+          {event.summary}
+        </p>
+      )}
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Período</h2>
+        <p>{event.biblical_period ?? "Pendiente"}</p>
+      </article>
+
+      <article class="card">
+        <h2>Fecha aproximada</h2>
+        <p>{event.approximate_date ?? "Pendiente"}</p>
+      </article>
+
+      <article class="card">
+        <h2>Certeza temporal</h2>
+        <p>{event.temporal_certainty ?? "Pendiente"}</p>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2>Descripción</h2>
+
+      <div class="content">
+        <p>{event.description ?? "Descripción pendiente."}</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Uso en la enciclopedia</h2>
+
+      <ul class="list">
+        <li>Línea de tiempo: {event.appears_on_timeline ? "Sí" : "No"}</li>
+        <li>Mapa: {event.appears_on_map ? "Sí" : "No"}</li>
+        <li>Certeza geográfica: {event.geographical_certainty ?? "Pendiente"}</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
