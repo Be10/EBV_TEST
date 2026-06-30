@@ -280,6 +280,83 @@ const pageTitle = title === siteName ? title : `${title} | ${siteName}`;
     color: #8a5a2b;
   }
 
+    .timeline {
+    position: relative;
+    display: grid;
+    gap: 18px;
+    margin-top: 32px;
+  }
+
+  .timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .timeline-date {
+    position: sticky;
+    top: 16px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: #fff7e8;
+    border: 1px solid #eadcc4;
+    color: #8a5a2b;
+    font-weight: 800;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .timeline-card {
+    position: relative;
+    padding: 24px;
+    border-radius: 22px;
+    background: white;
+    border: 1px solid #eadcc4;
+  }
+
+  .timeline-card::before {
+    content: "";
+    position: absolute;
+    left: -27px;
+    top: 30px;
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: #5d3212;
+    box-shadow: 0 0 0 6px #f8f5ee;
+  }
+
+  .timeline-card h2 {
+    margin: 0 0 8px;
+    font-size: 1.25rem;
+  }
+
+  .timeline-card p {
+    margin: 0;
+    line-height: 1.6;
+    color: #6a5c4d;
+  }
+
+  .timeline-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 0;
+  }
+
+  .timeline-meta span {
+    display: inline-flex;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #fff7e8;
+    border: 1px solid #eadcc4;
+    color: #5d3212;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
   @media (max-width: 760px) {
     .site-header {
       align-items: flex-start;
@@ -296,6 +373,18 @@ const pageTitle = title === siteName ? title : `${title} | ${siteName}`;
 
     .entity-list {
       grid-template-columns: 1fr;
+    }
+
+    .timeline-item {
+      grid-template-columns: 1fr;
+    }
+
+    .timeline-date {
+      position: static;
+    }
+
+    .timeline-card::before {
+      display: none;
     }
 
     .section {
