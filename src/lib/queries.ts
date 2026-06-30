@@ -169,3 +169,27 @@ export function getGlossaryByLessonId(lessonId: string): RelatedItem[] {
     )
     .all(lessonId) as RelatedItem[];
 }
+
+export function getAllRoutes(): Route[] {
+  return db
+    .prepare(
+      `
+      SELECT *
+      FROM routes
+      ORDER BY title ASC
+      `
+    )
+    .all() as Route[];
+}
+
+export function getAllLessons(): Lesson[] {
+  return db
+    .prepare(
+      `
+      SELECT *
+      FROM lessons
+      ORDER BY lesson_number ASC
+      `
+    )
+    .all() as Lesson[];
+}

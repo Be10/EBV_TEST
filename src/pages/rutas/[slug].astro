@@ -1,14 +1,30 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { getRouteBySlug, getLessonsByRouteId } from "../../../lib/queries";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  getAllRoutes,
+  getLessonsByRouteId,
+  type Route,
+  type Lesson,
+} from "../../lib/queries";
 
-const route = getRouteBySlug("panorama-visual-de-la-biblia");
+type Props = {
+  route: Route;
+  lessons: Lesson[];
+};
 
-if (!route) {
-  throw new Error("No se encontró la ruta Panorama Visual de la Biblia.");
+export function getStaticPaths() {
+  const routes = getAllRoutes();
+
+  return routes.map((route) => ({
+    params: { slug: route.slug },
+    props: {
+      route,
+      lessons: getLessonsByRouteId(route.id),
+    },
+  }));
 }
 
-const lessons = getLessonsByRouteId(route.id);
+const { route, lessons } = Astro.props;
 ---
 
 <BaseLayout
@@ -21,7 +37,7 @@ const lessons = getLessonsByRouteId(route.id);
     </div>
 
     <section class="hero">
-      <p class="eyebrow">Ruta principal · {lessons.length} lecciones</p>
+      <p class="eyebrow">Ruta · {lessons.length} lecciones</p>
 
       <h1>{route.title}</h1>
 
@@ -29,11 +45,13 @@ const lessons = getLessonsByRouteId(route.id);
         {route.description}
       </p>
 
-      <div class="actions">
-        <a href="/lecciones/la-biblia-como-una-sola-historia/" class="button">
-          Empezar lección 1
-        </a>
-      </div>
+      {lessons.length > 0 && (
+        <div class="actions">
+          <a href={`/lecciones/${lessons[0].slug}/`} class="button">
+            Empezar lección 1
+          </a>
+        </div>
+      )}
     </section>
 
     <section class="grid">
