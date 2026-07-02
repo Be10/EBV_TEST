@@ -396,3 +396,62 @@ export function getEventsByPlaceId(placeId: string): Event[] {
     )
     .all(placeId) as Event[];
 }
+
+export type EventRelatedPlace = {
+  title: string;
+  slug: string;
+  place_type: string | null;
+  summary: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  geographical_certainty: string | null;
+};
+
+export function getPeopleByEventId(eventId: string): RelatedItem[] {
+  return db
+    .prepare(
+      `
+      SELECT people.name AS title, people.slug, people.summary
+      FROM event_people
+      JOIN people ON people.id = event_people.person_id
+      WHERE event_people.event_id = ?
+      ORDER BY people.name ASC
+      `
+    )
+    .all(eventId) as RelatedItem[];
+}
+
+export function getPlacesByEventId(eventId: string): EventRelatedPlace[] {
+  return db
+    .prepare(
+      `
+      SELECT
+        places.name AS title,
+        places.slug,
+        places.place_type,
+        places.summary,
+        places.latitude,
+        places.longitude,
+        places.geographical_certainty
+      FROM event_places
+      JOIN places ON places.id = event_places.place_id
+      WHERE event_places.event_id = ?
+      ORDER BY places.name ASC
+      `
+    )
+    .all(eventId) as EventRelatedPlace[];
+}
+
+export function getTopicsByEventId(eventId: string): RelatedItem[] {
+  return db
+    .prepare(
+      `
+      SELECT topics.title, topics.slug, topics.definition
+      FROM event_topics
+      JOIN topics ON topics.id = event_topics.topic_id
+      WHERE event_topics.event_id = ?
+      ORDER BY topics.title ASC
+      `
+    )
+    .all(eventId) as RelatedItem[];
+}

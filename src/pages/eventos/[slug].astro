@@ -2,11 +2,19 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
   getAllEvents,
+  getPeopleByEventId,
+  getPlacesByEventId,
+  getTopicsByEventId,
   type Event,
+  type EventRelatedPlace,
+  type RelatedItem,
 } from "../../lib/queries";
 
 type Props = {
   event: Event;
+  people: RelatedItem[];
+  places: EventRelatedPlace[];
+  topics: RelatedItem[];
 };
 
 export function getStaticPaths() {
@@ -16,11 +24,20 @@ export function getStaticPaths() {
     .filter((event) => event.status !== "Borrador")
     .map((event) => ({
       params: { slug: event.slug },
-      props: { event },
+      props: {
+        event,
+        people: getPeopleByEventId(event.id),
+        places: getPlacesByEventId(event.id),
+        topics: getTopicsByEventId(event.id),
+      },
     }));
 }
 
-const { event } = Astro.props;
+const { event, people, places, topics } = Astro.props;
+
+const firstMappablePlace = places.find(
+  (place) => place.latitude !== null && place.longitude !== null
+);
 ---
 
 <BaseLayout
@@ -41,6 +58,14 @@ const { event } = Astro.props;
         <p class="subtitle">
           {event.summary}
         </p>
+      )}
+
+      {firstMappablePlace && (
+        <div class="actions">
+          <a href={`/mapa/?lugar=${firstMappablePlace.slug}`} class="button">
+            Ver en el mapa bíblico
+          </a>
+        </div>
       )}
     </section>
 
@@ -69,6 +94,71 @@ const { event } = Astro.props;
       </div>
     </section>
 
+    {(places.length > 0 || people.length > 0 || topics.length > 0) && (
+      <section class="grid">
+        {places.length > 0 && (
+          <article class="card">
+            <h2>Lugares</h2>
+
+            <ul class="list">
+              {places.map((place) => (
+                <li>
+                  <a href={`/lugares/${place.slug}/`}>{place.title}</a>
+                  {place.geographical_certainty && (
+                    <span> · certeza: {place.geographical_certainty}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </article>
+        )}
+
+        {people.length > 0 && (
+          <article class="card">
+            <h2>Personajes</h2>
+
+            <ul class="list">
+              {people.map((person) => (
+                <li>
+                  <a href={`/personajes/${person.slug}/`}>{person.title}</a>
+                </li>
+              ))}
+            </ul>
+          </article>
+        )}
+
+        {topics.length > 0 && (
+          <article class="card">
+            <h2>Temas</h2>
+
+            <ul class="list">
+              {topics.map((topic) => (
+                <li>
+                  <a href={`/temas/${topic.slug}/`}>{topic.title}</a>
+                </li>
+              ))}
+            </ul>
+          </article>
+        )}
+      </section>
+    )}
+
+    {places.length > 0 && (
+      <section class="section">
+        <h2>Lugares relacionados</h2>
+
+        <div class="entity-list">
+          {places.map((place) => (
+            <a href={`/lugares/${place.slug}/`} class="entity-card">
+              <span class="meta">{place.place_type ?? "Lugar"}</span>
+              <h2>{place.title}</h2>
+              <p>{place.summary ?? "Descripción pendiente."}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
     <section class="section">
       <h2>Uso en la enciclopedia</h2>
 
@@ -77,6 +167,12 @@ const { event } = Astro.props;
         <li>Mapa: {event.appears_on_map ? "Sí" : "No"}</li>
         <li>Certeza geográfica: {event.geographical_certainty ?? "Pendiente"}</li>
       </ul>
+    </section>
+
+    <section class="section">
+      <a href="/eventos/" class="button secondary">
+        Volver a eventos
+      </a>
     </section>
   </main>
 </BaseLayout>
